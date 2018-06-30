@@ -34,33 +34,45 @@ public class FlashCardOverviewController {
     // Reference to the main application.
     private MainApp mainApp;
     
-    private ObservableList<SimpleStringProperty> testArrayList = FXCollections.observableArrayList();
+    private ObservableList<SimpleStringProperty> flashCardArrayList = FXCollections.observableArrayList();
     
+    //private function used to test the arrayList
     private void addToArrayList() {
-    	testArrayList.add(new SimpleStringProperty("this"));
-    	testArrayList.add(new SimpleStringProperty("is"));
-    	testArrayList.add(new SimpleStringProperty("a"));
-    	testArrayList.add(new SimpleStringProperty("test"));
+    	flashCardArrayList.add(new SimpleStringProperty("this"));
+    	flashCardArrayList.add(new SimpleStringProperty("is"));
+    	flashCardArrayList.add(new SimpleStringProperty("a"));
+    	flashCardArrayList.add(new SimpleStringProperty("test"));
     }
     
     
     @FXML
     private void initialize() {
     	
-    	for(int i=0; i<3; i++)
-    	{
-    		FlashCardListColumn.setCellValueFactory(cellData -> cellData.getValue());
-    	}
+    	System.out.println("does this do anything now");
+    	//System.out.println(mainApp.getStackSize());
+    	
+    	FlashCardListColumn.setCellValueFactory(cellData -> cellData.getValue());
+//    	for(int i=0; i<4; i++)
+//    	{
+//    		System.out.println("how many times is this even called?");
+//    		
+//    		FlashCardListColumn.setCellValueFactory(cellData -> cellData.getValue());
+//    	}
     	
     	
+    	
+    }
+    
+    public void testFunction()
+    {
+    	System.out.println("does this even work when i do this stuff?");
     	
     }
     
     
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
-        addToArrayList();
-        FlashCardTable.setItems(testArrayList);
+        FlashCardTable.setItems(mainApp.getFlashCardStack());
 
     }
 	
