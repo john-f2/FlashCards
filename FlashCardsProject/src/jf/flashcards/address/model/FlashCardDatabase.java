@@ -8,10 +8,13 @@
 package jf.flashcards.address.model;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import jf.flashcards.address.util.CardPair;
+
 
 public class FlashCardDatabase {
 	
@@ -64,9 +67,10 @@ public class FlashCardDatabase {
 	         
 			//I can change this instead of ON CONFLICT INGNORE, I can use ABORT 
 			//and it will cause an exception which i can catch for debugging later 
+			//name  TEXT UNIQUE ON CONFLICT IGNORE
 	         String tableQuery = "CREATE TABLE IF NOT EXISTS flash_card_list " +
 	        		 		"(id  INTEGER   PRIMARY KEY  AUTOINCREMENT NOT NULL, " +
-	        		 		" name  TEXT UNIQUE ON CONFLICT IGNORE NOT NULL )";
+	        		 		" name  TEXT UNIQUE ON CONFLICT FAIl NOT NULL )";
 	         
 	         stmt.executeUpdate(tableQuery);
 	         
@@ -88,7 +92,59 @@ public class FlashCardDatabase {
 			String insertQuery = "INSERT INTO flash_card_list(id, name) VALUES (?, ?)"; 
 			PreparedStatement pstmt = db.prepareStatement(insertQuery);
 			pstmt.setString(1, null);
-			pstmt.setString(2, newFlashCardStack);
+			pstmt.setString(2, newFlashCardStack.toLowerCase());
+			
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			
+			newFlashCardStackTable(newFlashCardStack);
+			
+			
+			
+			return true;
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println("insert failed, thus it must be in the list already");
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			return false;
+		}
+		
+	}
+	
+	private static void newFlashCardStackTable(String newStack) {
+		
+		try {
+		
+			String addStackQuery = "CREATE TABLE IF NOT EXISTS  " + newStack.toLowerCase() 
+								+ "(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+								+ "front TEXT NOT NULL, "
+								+ "back  TEXT NOT NULL) ";
+			
+			 stmt.executeUpdate(addStackQuery);	
+			}
+		catch(Exception e)
+		{
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		}
+		
+		
+	}
+	
+	
+	public static boolean addNewCardToStack(String table, String front, String back) {
+		
+		try {
+			
+			String addQuery = "INSERT INTO " + table.toLowerCase()
+							 +"(id, front, back) VALUES(?,?,?)";
+			
+			PreparedStatement pstmt = db.prepareStatement(addQuery);
+			pstmt.setString(1,null);
+			pstmt.setString(2, front);
+			pstmt.setString(3, back);
 			
 			pstmt.executeUpdate();
 			
@@ -103,6 +159,39 @@ public class FlashCardDatabase {
 			return false;
 		}
 		
+		
+		
+	}
+	
+	
+	public static ArrayList<CardPair> getFlashCardStack(String getStack)
+	{
+		ArrayList<CardPair> returnArrayList = new ArrayList<CardPair>();
+		
+		
+		try {
+			String stackQuery = "SELECT front, back FROM  " + getStack.toLowerCase();
+			ResultSet rs = stmt.executeQuery(stackQuery);
+
+			while(rs.next())
+			{
+				String cardFront = rs.getString("front");
+				String cardBack = rs.getString("back");
+				CardPair newPair = new CardPair(cardFront, cardBack);
+				returnArrayList.add(newPair);
+				
+				
+			}
+			
+		}
+		catch(Exception e)
+		{
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.out.println("Error");
+		}
+		
+		
+		return returnArrayList;
 	}
 	
 	public static ObservableList<SimpleStringProperty> getFlashCardList()
@@ -145,6 +234,21 @@ public class FlashCardDatabase {
 			return false;
 		}
 		
+	}
+	
+	public static boolean dropFlashCardStack(String dropStack) {
+		try {
+			String dropTableQuery = "DROP TABLE IF EXISTS " + dropStack;
+			stmt.executeUpdate(dropTableQuery);	
+			return true;
+			
+		}
+		catch(Exception e)
+		{
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.out.println("did not drop table");
+			return false;
+		}
 	}
 	
 	

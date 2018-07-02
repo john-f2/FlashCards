@@ -41,14 +41,14 @@
                      <center>
                         <Pane prefHeight="289.0" prefWidth="232.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Label layoutX="99.0" layoutY="145.0" text="Label" />
+                              <Label fx:id="currentCardLabel" layoutX="99.0" layoutY="145.0" text="Label" />
                            </children>
                         </Pane>
                      </center>
                      <top>
                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <buttons>
-                              <Button mnemonicParsing="false" text="Add" />
+                              <Button mnemonicParsing="false" onAction="#addNewCard" text="Add" />
                               <Button mnemonicParsing="false" text="Delete" />
                             <Button mnemonicParsing="false" text="Shuffle" />
                           </buttons>

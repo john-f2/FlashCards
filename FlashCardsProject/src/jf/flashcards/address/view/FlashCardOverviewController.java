@@ -20,6 +20,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import jf.flashcards.address.MainApp;
+import jf.flashcards.address.model.FlashCardDatabase;
+import jf.flashcards.address.util.CardPair;
 
 
 public class FlashCardOverviewController {
@@ -30,11 +32,19 @@ public class FlashCardOverviewController {
 	@FXML
 	private TableColumn<SimpleStringProperty,String> FlashCardListColumn;
 	
+	@FXML
+	private Label currentCardLabel;
+	
 	
     // Reference to the main application.
     private MainApp mainApp;
     
+    private String currentSelectedString = "";
+    
     private ObservableList<SimpleStringProperty> flashCardArrayList = FXCollections.observableArrayList();
+    
+    private ArrayList<CardPair> currentFlashCardStack = null;
+    
     
     //private function used to test the arrayList
     private void addToArrayList() {
@@ -48,10 +58,18 @@ public class FlashCardOverviewController {
     @FXML
     private void initialize() {
     	
-    	System.out.println("does this do anything now");
+
     	//System.out.println(mainApp.getStackSize());
     	
+    	currentCardLabel.setText("");
+    	
     	FlashCardListColumn.setCellValueFactory(cellData -> cellData.getValue());
+    	
+    	FlashCardTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> displayStackDetails(newValue));
+        
+    	   
+    	
 //    	for(int i=0; i<4; i++)
 //    	{
 //    		System.out.println("how many times is this even called?");
@@ -59,13 +77,59 @@ public class FlashCardOverviewController {
 //    		FlashCardListColumn.setCellValueFactory(cellData -> cellData.getValue());
 //    	}
     	
+    }
+    
+    
+    public void displayStackDetails(SimpleStringProperty selectedValue)
+    {
+    	currentSelectedString = selectedValue.get();
     	
+    	currentFlashCardStack = FlashCardDatabase.getFlashCardStack(currentSelectedString);
+    	
+    	if(!currentFlashCardStack.isEmpty()){
+    		currentCardLabel.setText(currentFlashCardStack.get(0).getFront());
+    		
+    	}
+    	else
+    	{
+    		currentCardLabel.setText("");
+    	}
     	
     }
     
-    public void testFunction()
-    {
-    	System.out.println("does this even work when i do this stuff?");
+    
+
+    
+    
+    @FXML
+    private void addNewCard() {
+    	
+    	if(currentSelectedString.equals(""))
+    	{
+    		 Alert alert = new Alert(AlertType.WARNING);
+             alert.initOwner(mainApp.getPrimaryStage());
+             alert.setTitle("No Selection");
+             alert.setHeaderText("No Flash Card Stack Selected");
+             alert.setContentText("Please select a stack in the table.");
+
+             alert.showAndWait();
+    	}
+    	else
+    	{
+    		boolean cancelClicked = mainApp.showAddNewCardToStack(currentSelectedString);
+    		if(cancelClicked)
+    		{
+    			currentFlashCardStack = FlashCardDatabase.getFlashCardStack(currentSelectedString);
+    			if(currentCardLabel.getText().equals(""))
+    			{
+    				//this get(0) is temporary, i will have a pointer to the cards later!
+    				currentCardLabel.setText(currentFlashCardStack.get(0).getFront());
+    			}
+    		}
+    	}
+    	
+    	
+
     	
     }
     

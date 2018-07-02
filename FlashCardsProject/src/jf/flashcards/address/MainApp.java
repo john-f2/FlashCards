@@ -25,6 +25,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jf.flashcards.address.model.FlashCardDatabase;
+import jf.flashcards.address.view.AddCardToStackController;
 import jf.flashcards.address.view.AddFlashCardStackController;
 import jf.flashcards.address.view.FlashCardOverviewController;
 import jf.flashcards.address.view.RootStageController;
@@ -53,6 +54,11 @@ public class MainApp extends Application {
     		System.out.println(i);
     	}
     }
+    
+    
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 	
 
     /**
@@ -72,8 +78,9 @@ public class MainApp extends Application {
         //sets up the sqlite table if it doesn't exists
         System.out.println(FlashCardDatabase.establishConnection());
         System.out.println(FlashCardDatabase.dropFlashCardList());
+        System.out.println(FlashCardDatabase.dropFlashCardStack("test"));
         System.out.println(FlashCardDatabase.createFlashCardListTable());
-        System.out.println(FlashCardDatabase.insertIntoFlashCardList("jump"));
+        System.out.println(FlashCardDatabase.insertIntoFlashCardList("test"));
         System.out.println(FlashCardDatabase.insertIntoFlashCardList("up"));
         flashCardStack = FlashCardDatabase.getFlashCardList();
 //        flashCardStack = FlashCardDatabase.getFlashCardList();
@@ -152,6 +159,46 @@ public class MainApp extends Application {
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean showAddNewCardToStack(String stackTable)
+	{
+		try {
+			FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/AddNewCardToStack.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            //sets the Stage and Scene
+            //Allows the new Scene to be shown in a window 
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Person");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            //create scene object and give it the page variable 
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            //References the AddFlashCardStackController class 
+            //so that it can be connected to the main class
+            AddCardToStackController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            
+            controller.setCurrentStackTable(stackTable);
+            
+            //waits until the dialogStage is closed
+            dialogStage.showAndWait();
+            
+            return controller.returnCancelClicked();
+            
+			
+		}
+		catch(IOException e)
+		{
+            e.printStackTrace();
+            return false;
+            
+		}
+		
 	}
 	
 	
