@@ -164,20 +164,43 @@ public class FlashCardDatabase {
 	}
 	
 	
+	public static boolean removeCardFromStack(int cardId, String stackTable)
+	{
+		try {
+			String deleteQuery = "DELETE FROM " + stackTable.toLowerCase()
+								 + " WHERE id= " + cardId;
+			
+
+			stmt.executeUpdate(deleteQuery);
+			
+			return true;
+			
+		}
+		catch(Exception e)
+		{
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			return false;
+			
+		}
+	}
+	
+	
 	public static ArrayList<CardPair> getFlashCardStack(String getStack)
 	{
 		ArrayList<CardPair> returnArrayList = new ArrayList<CardPair>();
 		
 		
 		try {
-			String stackQuery = "SELECT front, back FROM  " + getStack.toLowerCase();
+			String stackQuery = "SELECT id, front, back FROM  " + getStack.toLowerCase();
 			ResultSet rs = stmt.executeQuery(stackQuery);
 
 			while(rs.next())
 			{
 				String cardFront = rs.getString("front");
 				String cardBack = rs.getString("back");
-				CardPair newPair = new CardPair(cardFront, cardBack);
+				String cardId = rs.getString("id");
+				int cardIdNum = Integer.parseInt(cardId);
+				CardPair newPair = new CardPair(cardIdNum,cardFront, cardBack);
 				returnArrayList.add(newPair);
 				
 				
