@@ -67,9 +67,10 @@ public class AddCardToStackController {
 		if(checkValidInputs())
 		{
 			FlashCardDatabase.addNewCardToStack(currentTable, newCardFront.getText(), newCardBack.getText());
+			String msgText = newCardFront.getText() + " has been succesfully added!";
 			newCardFront.clear();
 			newCardBack.clear();
-			msgLabel.setText("New Card Successfully added!");
+			msgLabel.setText(msgText);
 			
 		}
 		else {

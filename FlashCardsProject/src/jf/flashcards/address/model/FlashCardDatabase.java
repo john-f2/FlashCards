@@ -163,6 +163,31 @@ public class FlashCardDatabase {
 		
 	}
 	
+//	public static String getStackListId(String name)
+//	{
+//		String id ="";
+//		try {
+//			
+//			String getIdQuery = "SELECT id FROM flash_card_list WHERE name= '" + name +"'";
+//			
+//			ResultSet rs = stmt.executeQuery(getIdQuery);
+//			
+//			if(rs.next())
+//			{
+//				id = rs.getString("id");
+//				
+//			}
+//			return id;
+//			
+//		}
+//		catch(Exception e)
+//		{
+//			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+//			System.out.println("did not return id");
+//			return id;
+//		}
+//	}
+	
 	
 	public static boolean removeCardFromStack(int cardId, String stackTable)
 	{
@@ -257,6 +282,23 @@ public class FlashCardDatabase {
 			return false;
 		}
 		
+	}
+	
+	
+	public static boolean removeFlashCardStackFromList(String removeStack) {
+		try {
+			String removeTableQuery = "DELETE FROM flash_card_list WHERE name = '" + removeStack + "'";
+			stmt.executeUpdate(removeTableQuery);
+			
+			return true;
+			
+		}
+		catch(Exception e)
+		{
+			
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			return false;
+		}
 	}
 	
 	public static boolean dropFlashCardStack(String dropStack) {

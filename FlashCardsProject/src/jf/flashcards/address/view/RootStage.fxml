@@ -17,10 +17,10 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete Flash Card Stack" />
+              <MenuItem mnemonicParsing="false" onAction="#handleDeleteStack" text="Delete Flash Card Stack" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
+          <Menu mnemonicParsing="false" onAction="#handleAbout" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="About" />
             </items>

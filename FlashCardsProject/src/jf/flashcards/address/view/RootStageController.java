@@ -3,6 +3,8 @@ package jf.flashcards.address.view;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import jf.flashcards.address.MainApp;
 import jf.flashcards.address.model.FlashCardDatabase;
 
@@ -43,6 +45,25 @@ public class RootStageController {
 //            }
     		
     	}
+    	
+    }
+    
+    @FXML
+    private void handleAbout() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("FlashCard Application");
+        alert.setHeaderText("About Application");
+        alert.setContentText("Flash Card Application v1.0\nAuthor: John Fu");
+
+        alert.showAndWait();
+    }
+    
+    
+    @FXML
+    private void handleDeleteStack(){
+    	
+    	mainApp.showDeleteFlashCardStack();
+    	mainApp.showFlashCardOverview();
     	
     }
 

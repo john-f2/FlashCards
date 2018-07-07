@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 import jf.flashcards.address.model.FlashCardDatabase;
 import jf.flashcards.address.view.AddCardToStackController;
 import jf.flashcards.address.view.AddFlashCardStackController;
+import jf.flashcards.address.view.DeleteStackDialogController;
 import jf.flashcards.address.view.FlashCardOverviewController;
 import jf.flashcards.address.view.RootStageController;
 
@@ -241,6 +242,40 @@ public class MainApp extends Application {
 		}
 	}
 	
+	
+	public void showDeleteFlashCardStack()
+	{
+		try {
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(MainApp.class.getResource("view/DeleteStackDialog.fxml"));
+	        AnchorPane page = (AnchorPane) loader.load();
+	        
+            //sets the Stage and Scene
+            //Allows the new Scene to be shown in a window 
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Person");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(primaryStage);
+            //create scene object and give it the page variable 
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            DeleteStackDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+  
+            
+            //waits until the dialogStage is closed
+            dialogStage.showAndWait();
+			
+		}		
+		catch(IOException e)
+		{
+            e.printStackTrace();
+         
+		}
+
+		
+	}
 
 	public static void main(String[] args) {
 		launch(args);

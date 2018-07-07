@@ -105,6 +105,7 @@ public class FlashCardOverviewController {
     	}
     	else
     	{
+    		frontBackLabel.setText("");
     		currentCardLabel.setText("");
     	}
     	
@@ -229,6 +230,16 @@ public class FlashCardOverviewController {
     		frontShowing = true;
         	
     	}
+    	else
+    	{
+       		Alert alert = new Alert(AlertType.WARNING);
+    		alert.initOwner(mainApp.getPrimaryStage());
+    		alert.setTitle("No Selection");
+    		alert.setHeaderText("No cards are in the stack");
+    		alert.setContentText("Cannot shuffle cards");
+
+    		alert.showAndWait();
+    	}
 
     }
     
@@ -286,7 +297,11 @@ public class FlashCardOverviewController {
     
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
-        FlashCardTable.setItems(mainApp.getFlashCardStack());
+        //testing this out
+        FlashCardTable.setItems(FlashCardDatabase.getFlashCardList());
+        
+        //original
+        //FlashCardTable.setItems(mainApp.getFlashCardStack());
 
     }
 	
