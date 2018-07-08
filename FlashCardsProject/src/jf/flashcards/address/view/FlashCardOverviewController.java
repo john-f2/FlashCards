@@ -37,11 +37,13 @@ public class FlashCardOverviewController {
 	private TableColumn<SimpleStringProperty,String> FlashCardListColumn;
 	
 	@FXML
-	private Label currentCardLabel;
+	private Label backCardLabel;
 	
 	@FXML
 	private Label frontBackLabel;
 	
+	@FXML
+	private Label frontCardLabel;
 	
     // Reference to the main application.
     private MainApp mainApp;
@@ -72,8 +74,11 @@ public class FlashCardOverviewController {
 
     	//System.out.println(mainApp.getStackSize());
     	
-    	currentCardLabel.setText("");
+    	frontCardLabel.setText("");
+    	backCardLabel.setText("");
     	frontBackLabel.setText("");
+    	
+
     	
     	FlashCardListColumn.setCellValueFactory(cellData -> cellData.getValue());
     	
@@ -99,14 +104,15 @@ public class FlashCardOverviewController {
     	currentFlashCardStack = FlashCardDatabase.getFlashCardStack(currentSelectedString);
     	
     	if(!currentFlashCardStack.isEmpty()){
-    		currentCardLabel.setText(currentFlashCardStack.get(0).getFront());
+    		frontCardLabel.setText(currentFlashCardStack.get(0).getFront());
     		frontBackLabel.setText("Front");
     		
     	}
     	else
     	{
     		frontBackLabel.setText("");
-    		currentCardLabel.setText("");
+    		frontCardLabel.setText("");
+    		backCardLabel.setText("");
     	}
     	
     }
@@ -134,12 +140,16 @@ public class FlashCardOverviewController {
     		if(cancelClicked)
     		{
     			currentFlashCardStack = FlashCardDatabase.getFlashCardStack(currentSelectedString);
-    			if(currentCardLabel.getText().equals(""))
+    			
+    			if(!currentFlashCardStack.isEmpty() && frontCardLabel.getText().equals(""))
     			{
     				//this get(0) is temporary, i will have a pointer to the cards later!
-    				currentCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
+    				frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
     				frontShowing = true;
     				frontBackLabel.setText("Front");
+    				
+
+    				
     			}
     		}
     	}
@@ -164,7 +174,7 @@ public class FlashCardOverviewController {
     		
     			listIndex +=1;
     		}
-    		currentCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
+    		frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
     		frontShowing = true;
     		frontBackLabel.setText("Front");
     		
@@ -185,7 +195,7 @@ public class FlashCardOverviewController {
     		{
     			listIndex = listIndex - 1;
     		}
-    		currentCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
+    		frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
     		frontShowing = true;
     		frontBackLabel.setText("Front");
     	}
@@ -206,12 +216,20 @@ public class FlashCardOverviewController {
     	}
     	else if(frontShowing)
     	{
-    		currentCardLabel.setText(currentFlashCardStack.get(listIndex).getBack());
+    		backCardLabel.setText(currentFlashCardStack.get(listIndex).getBack());
+    		frontCardLabel.setText("");
     		frontShowing = false;
     		frontBackLabel.setText("Back");
+    		
+
+	    	backCardLabel.setMaxWidth(280);
+	    	backCardLabel.setMaxHeight(160);
+	    	backCardLabel.setWrapText(true);
+    		
     	}
     	else if(frontShowing == false) {
-    		currentCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
+    		frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
+    		backCardLabel.setText("");
     		frontShowing = true;
     		frontBackLabel.setText("Front");
     		
@@ -226,7 +244,7 @@ public class FlashCardOverviewController {
     	{
         	Collections.shuffle(currentFlashCardStack);
         	listIndex = 0;
-    		currentCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
+    		frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
     		frontShowing = true;
         	
     	}
@@ -264,14 +282,15 @@ public class FlashCardOverviewController {
     			if(!currentFlashCardStack.isEmpty())
     			{
         			listIndex = 0;
-            		currentCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
+            		frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
             		frontShowing = true;
     			}
     			else
     			{
     				listIndex =0;
     				frontShowing = true;
-    				currentCardLabel.setText("");
+    				frontCardLabel.setText("");
+    				backCardLabel.setText("");
     				
     			}
 
