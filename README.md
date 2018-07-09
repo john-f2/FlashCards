@@ -21,7 +21,7 @@ Edit > Delete Flash Card Stack
 ```
 which then you can select which Stack you want to remove. Removing a Stack will remove all the Cards from the database. 
 
-### Future Plans
+## Future Plans
 I plan to continue adding on to this small application. I want to continue improving functionality and look 
 
 ## Author
