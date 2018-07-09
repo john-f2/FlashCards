@@ -39,22 +39,30 @@ public class MainApp extends Application {
     private ObservableList<SimpleStringProperty> flashCardStack = FXCollections.observableArrayList();;
     
     
+    
+    /**
+     *  returns the private flashCardStack ObservableList
+     *  
+     * @return the flashCardStack
+     */
     public ObservableList<SimpleStringProperty> getFlashCardStack()
     {
     	return flashCardStack;
     }
     
-
-    
+    /**
+     * sets the flashCardStack 
+     * @param updatedStack
+     */
     public void setFlashCardStack(ObservableList<SimpleStringProperty> updatedStack)
     {
     	flashCardStack = updatedStack;
     	
-    	for(SimpleStringProperty i : flashCardStack)
-    	{
-    		System.out.println(i);
-    	}
+
     }
+
+    
+
     
     
     public Stage getPrimaryStage() {
@@ -76,21 +84,10 @@ public class MainApp extends Application {
         //***Currently a placeholder image****
         this.primaryStage.getIcons().add(new Image("file:resources/images/if_Task_1737367.png"));
         
-        //sets up the sqlite table if it doesn't exists
-        System.out.println(FlashCardDatabase.establishConnection());
-        System.out.println(FlashCardDatabase.dropFlashCardList());
-        System.out.println(FlashCardDatabase.dropFlashCardStack("test"));
-        System.out.println(FlashCardDatabase.createFlashCardListTable());
-        System.out.println(FlashCardDatabase.insertIntoFlashCardList("test"));
-        System.out.println(FlashCardDatabase.insertIntoFlashCardList("up"));
+        //sets up the flashCardList tables if it doesn't exists
+        FlashCardDatabase.establishConnection();
+        FlashCardDatabase.createFlashCardListTable();
         flashCardStack = FlashCardDatabase.getFlashCardList();
-//        flashCardStack = FlashCardDatabase.getFlashCardList();
-//        
-//        for(SimpleStringProperty i : flashCardStack)
-//        {
-//        	System.out.println(i);
-//        }
-        
 
         
         //calls these two void methods that display the rootStage and the flashCardOverview 
@@ -99,9 +96,11 @@ public class MainApp extends Application {
 	}
 	
 	
+	/**
+	 * on the stop of the program, close the connections
+	 */
     @Override
     public void stop() {
-        System.out.println("Stop");
         FlashCardDatabase.closeConnection();
 
     }
@@ -140,6 +139,9 @@ public class MainApp extends Application {
 		
 	}
 	
+	/**
+	 * sets the FlashCardOverview was the scene 
+	 */
 	public void showFlashCardOverview()
 	{
 		try {
@@ -162,6 +164,13 @@ public class MainApp extends Application {
 		}
 	}
 	
+	/**
+	 * shows the AddNewCardToStack scene through a seperate window
+	 * called from the FlashCardOverview view
+	 * 
+	 * @param stackTable, specifies the table that the card will be added to
+	 * @return boolean
+	 */
 	public boolean showAddNewCardToStack(String stackTable)
 	{
 		try {
@@ -203,7 +212,12 @@ public class MainApp extends Application {
 	}
 	
 	
-	
+	/**
+	 * displays the AddNewFlashCardStack() view 
+	 * allows user to add a new flash card stack
+	 * 
+	 * @return boolean
+	 */
 	public boolean showAddNewFlashCardStack()
 	{
 		try {
@@ -242,7 +256,12 @@ public class MainApp extends Application {
 		}
 	}
 	
-	
+	/**
+	 * shows the DeleteFlashCardStack view
+	 * allows the user to delete a flashcard stack  
+	 * 
+	 * 
+	 */
 	public void showDeleteFlashCardStack()
 	{
 		try {

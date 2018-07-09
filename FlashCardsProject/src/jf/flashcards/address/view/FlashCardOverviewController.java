@@ -1,5 +1,7 @@
 /**
  * Controller Class for the FlashCardOverview View
+ * gives functionality to all the buttons on the FlashCardOverview view 
+ * 
  * 
  * @author John Fu
  * 
@@ -30,18 +32,17 @@ import jf.flashcards.address.util.CardPair;
 
 public class FlashCardOverviewController {
 	
+	//view table and column variable 
 	@FXML
 	private TableView<SimpleStringProperty> FlashCardTable;
-	
 	@FXML
 	private TableColumn<SimpleStringProperty,String> FlashCardListColumn;
 	
+	//labels for the flashcard 
 	@FXML
 	private Label backCardLabel;
-	
 	@FXML
 	private Label frontBackLabel;
-	
 	@FXML
 	private Label frontCardLabel;
 	
@@ -50,8 +51,10 @@ public class FlashCardOverviewController {
     
     private String currentSelectedString = "";
     
+    //ObervableList variable which sets the table's items 
     private ObservableList<SimpleStringProperty> flashCardArrayList = FXCollections.observableArrayList();
     
+    //Variable representing the cards in a list 
     private ArrayList<CardPair> currentFlashCardStack = new ArrayList<CardPair>();
     
     private int listIndex = 0;
@@ -59,57 +62,47 @@ public class FlashCardOverviewController {
     private boolean frontShowing = true;
     
     
-    //private function used to test the arrayList
-    private void addToArrayList() {
-    	flashCardArrayList.add(new SimpleStringProperty("this"));
-    	flashCardArrayList.add(new SimpleStringProperty("is"));
-    	flashCardArrayList.add(new SimpleStringProperty("a"));
-    	flashCardArrayList.add(new SimpleStringProperty("test"));
-    }
-    
-    
     @FXML
     private void initialize() {
     	
-
-    	//System.out.println(mainApp.getStackSize());
-    	
+    	//initially sets the labels to blank
     	frontCardLabel.setText("");
     	backCardLabel.setText("");
     	frontBackLabel.setText("");
     	
 
-    	
+    	//sets the table to the flashCardArrayList items 
     	FlashCardListColumn.setCellValueFactory(cellData -> cellData.getValue());
     	
+    	//listener, when an item in the table is selected, call displayStackDetails() 
     	FlashCardTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> displayStackDetails(newValue));
         
-    	   
-    	
-//    	for(int i=0; i<4; i++)
-//    	{
-//    		System.out.println("how many times is this even called?");
-//    		
-//    		FlashCardListColumn.setCellValueFactory(cellData -> cellData.getValue());
-//    	}
     	
     }
     
     
-    public void displayStackDetails(SimpleStringProperty selectedValue)
+    /**
+     * when a new item is selected from the list, displayStackDetails is called, which changes 
+     * what is displayed and what the currentFlashCardStack is 
+     * @param selectedValue
+     */
+    private void displayStackDetails(SimpleStringProperty selectedValue)
     {
     	currentSelectedString = selectedValue.get();
     	
+    	//gets the currently selected flash card stack 
     	currentFlashCardStack = FlashCardDatabase.getFlashCardStack(currentSelectedString);
     	
     	if(!currentFlashCardStack.isEmpty()){
+    		//if the stack is not empty, set the first item in the list to the label
     		frontCardLabel.setText(currentFlashCardStack.get(0).getFront());
     		frontBackLabel.setText("Front");
     		
     	}
     	else
     	{
+    		//if the stack is empty, set all the labels to empty 
     		frontBackLabel.setText("");
     		frontCardLabel.setText("");
     		backCardLabel.setText("");
@@ -120,7 +113,13 @@ public class FlashCardOverviewController {
     
 
     
-    
+    /**
+     * gives functionality to the "add" button
+     * if there is a selected item from the table, then this method will
+     * call mainApp.showAddNewCardToStack() which will display the showAddNewCardToStack view 
+     * after the card(s) have been added through the showAddNewCardToStack view 
+     * the currentFlashCardStack is updated and the labels are set
+     */
     @FXML
     private void addNewCard() {
     	
@@ -143,7 +142,7 @@ public class FlashCardOverviewController {
     			
     			if(!currentFlashCardStack.isEmpty() && frontCardLabel.getText().equals(""))
     			{
-    				//this get(0) is temporary, i will have a pointer to the cards later!
+    				//sets the labels if the stack was empty before 
     				frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
     				frontShowing = true;
     				frontBackLabel.setText("Front");
@@ -154,16 +153,20 @@ public class FlashCardOverviewController {
     		}
     	}
     	
-    	
-
-    	
     }
     
+    
+    /**
+     * gives functionality to the next card button
+     * sets the labels to the next card 
+     * 
+     */
     @FXML
     private void nextCard() {
     	
     	if(!currentFlashCardStack.isEmpty())
     	{
+    		//if the listIndex goes beyond the currentFlashCardStack size, then it will go back to the start
     		if((listIndex + 1) >= currentFlashCardStack.size())
     		{
     			
@@ -171,9 +174,11 @@ public class FlashCardOverviewController {
     		}
     		else
     		{
-    		
+    			//goes to the next index 
     			listIndex +=1;
     		}
+    		
+    		//sets the labels 
     		frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
     		frontShowing = true;
     		frontBackLabel.setText("Front");
@@ -183,24 +188,40 @@ public class FlashCardOverviewController {
     	
     }
     
+    /**
+     * 
+     * gives functionality to the previous card button
+     * sets the labels to the previous card
+     * 
+     */
     @FXML
     private void previousCard() {
+    	
     	if(!currentFlashCardStack.isEmpty())
     	{
+    		//sets the listIndex to the back of the list if the listIndex is less than 0
     		if((listIndex -1) < 0 )
     		{
     			listIndex = currentFlashCardStack.size()-1;
     		}
     		else
     		{
+    			//sets the listIndex to the previous index 
     			listIndex = listIndex - 1;
     		}
+    		
+    		//sets the card labels 
     		frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
     		frontShowing = true;
     		frontBackLabel.setText("Front");
     	}
     }
     
+    
+    /**
+     * "Flips the card" by changing the front and back labels
+     * flip to back-> change front labels to "" and change back label to the card pair at index 
+     */
     @FXML
     private void flipCard() {
     	
@@ -214,6 +235,7 @@ public class FlashCardOverviewController {
 
     		alert.showAndWait();
     	}
+    	//changes labels to show back 
     	else if(frontShowing)
     	{
     		backCardLabel.setText(currentFlashCardStack.get(listIndex).getBack());
@@ -227,6 +249,7 @@ public class FlashCardOverviewController {
 	    	backCardLabel.setWrapText(true);
     		
     	}
+    	//changes labels to show front 
     	else if(frontShowing == false) {
     		frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
     		backCardLabel.setText("");
@@ -237,6 +260,12 @@ public class FlashCardOverviewController {
     	
     }
     
+    /**
+     * 
+     * shuffles the currentFlashCardStack by using Collections.Shuffle() 
+     * resets the labels and index after shuffling 
+     * 
+     */
     @FXML
     private void shuffleList() {
     	
@@ -261,13 +290,20 @@ public class FlashCardOverviewController {
 
     }
     
+    
+    /**
+     * 
+     * adds functionality to the delete button
+     * deletes the current card the user is on
+     * 
+     */
     @FXML
     private void deleteCard() {
     	
     	if(!currentFlashCardStack.isEmpty())
     	{
     		
-    		
+    		//before deleting, an confirmation alert is set to confirm the action
     		Alert alert = new Alert(AlertType.CONFIRMATION);
     		alert.setTitle("Confirmation");
     		alert.setHeaderText("Are you sure you want to delete this card");
@@ -279,12 +315,14 @@ public class FlashCardOverviewController {
     			FlashCardDatabase.removeCardFromStack(currentFlashCardStack.get(listIndex).getId(), currentSelectedString);
     			currentFlashCardStack = FlashCardDatabase.getFlashCardStack(currentSelectedString);
     			
+    			//if the stack still has cards after removing one
     			if(!currentFlashCardStack.isEmpty())
     			{
         			listIndex = 0;
             		frontCardLabel.setText(currentFlashCardStack.get(listIndex).getFront());
             		frontShowing = true;
     			}
+    			//if the stack is empty after removing the card 
     			else
     			{
     				listIndex =0;
@@ -313,7 +351,12 @@ public class FlashCardOverviewController {
     	
     }
     
-    
+    /**
+     * sets the mainApp of the controller to the mainApp of the project
+     * allows references to be given back 
+     * 
+     * @param mainApp
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
         //testing this out

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="FlashCardsApp.jnlp">
+  <information>
+    <title>FlashCardsApp</title>
+    <vendor>jf.flashcards</vendor>
+    <description>FlashCards</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="FlashCardsApp.jar" size="18443" download="eager" />
+    <jar href="libs/sqlite-jdbc-3.23.1.jar" size="6733696" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="0" height="0" main-class="jf.flashcards.address.MainApp"  name="FlashCards" />
+  <update check="background"/>
+</jnlp>

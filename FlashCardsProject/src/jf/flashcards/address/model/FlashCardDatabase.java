@@ -2,6 +2,10 @@
  * 
  * FlashCardDatabase class, used to access the database and return data 
  * 
+ * how the databases are set up is by having one main table called flash_card_list, 
+ * which contains the names of the flash cards stacks
+ * each name creates a table under the same name (ex: test table) which stores the cards for the stack 
+ * 
  * @author johnfu
  * 
  */
@@ -24,13 +28,18 @@ public class FlashCardDatabase {
 	private static Connection db = null;
 	private static Statement stmt = null;
 	
+	/**
+	 * creates the connection to the sqlite database 
+	 * called in mainApp Start()
+	 * @return
+	 */
 	public static boolean establishConnection(){
 		
 		try {
 	         Class.forName("org.sqlite.JDBC");
+	         //the database is called flashcards.db
 	         db = DriverManager.getConnection("jdbc:sqlite:flashcards.db");
 	         stmt = db.createStatement();
-	         System.out.println("Opened database successfully");
 	         
 	         return true;
 		}
@@ -43,8 +52,14 @@ public class FlashCardDatabase {
 	
 
 	
+	/**
+	 * closes the connections 
+	 * called when program ends in Stop()
+	 * @return
+	 */
 	public static boolean closeConnection() {
 		try {
+			//closes the connection and the statement
 			stmt.close();
 			db.close();
 			return true;
@@ -59,12 +74,17 @@ public class FlashCardDatabase {
 		}	
 	}
 	
+	
+	/**
+	 * Creates the FlashCardListTable which stores the flash card stack names
+	 * if a duplicate name is inserted to the table, then the action will fail
+	 * @return true if successful else false 
+	 */
 	public static boolean createFlashCardListTable() {
 
 		try{
 
-	         
-	         
+	        
 			//I can change this instead of ON CONFLICT INGNORE, I can use ABORT 
 			//and it will cause an exception which i can catch for debugging later 
 			//name  TEXT UNIQUE ON CONFLICT IGNORE
@@ -86,11 +106,21 @@ public class FlashCardDatabase {
 	}
 	
 	
+	/**
+	 * Inserts a new name into flash_card_list
+	 * flash_card_list tells the program which flashCardStacks are available 
+	 * and displays them on the table on the FlashCardOverview 
+	 * 
+	 * @param newFlashCardStack
+	 * @return true if successful else false
+	 */
 	public static boolean insertIntoFlashCardList(String newFlashCardStack) {
 		try {
 			
 			String insertQuery = "INSERT INTO flash_card_list(id, name) VALUES (?, ?)"; 
 			PreparedStatement pstmt = db.prepareStatement(insertQuery);
+			
+			//id is an autoincrement int 
 			pstmt.setString(1, null);
 			pstmt.setString(2, newFlashCardStack.toLowerCase());
 			
@@ -114,6 +144,12 @@ public class FlashCardDatabase {
 		
 	}
 	
+	/**
+	 * private method, called when a new flash card stack is added which creates 
+	 * a new table under the same name 
+	 * 
+	 * @param newStack
+	 */
 	private static void newFlashCardStackTable(String newStack) {
 		
 		try {
@@ -133,7 +169,14 @@ public class FlashCardDatabase {
 		
 	}
 	
-	
+	/**
+	 * adds a new card entry to the specified table 
+	 * called within FlashCardOverview through the add button
+	 * @param table
+	 * @param front
+	 * @param back
+	 * @return true if successful else false
+	 */
 	public static boolean addNewCardToStack(String table, String front, String back) {
 		
 		try {
@@ -163,32 +206,13 @@ public class FlashCardDatabase {
 		
 	}
 	
-//	public static String getStackListId(String name)
-//	{
-//		String id ="";
-//		try {
-//			
-//			String getIdQuery = "SELECT id FROM flash_card_list WHERE name= '" + name +"'";
-//			
-//			ResultSet rs = stmt.executeQuery(getIdQuery);
-//			
-//			if(rs.next())
-//			{
-//				id = rs.getString("id");
-//				
-//			}
-//			return id;
-//			
-//		}
-//		catch(Exception e)
-//		{
-//			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-//			System.out.println("did not return id");
-//			return id;
-//		}
-//	}
-	
-	
+	/**
+	 * removes specified card from the specified flash card stack 
+	 * called within FlashCardOverview through the remove button
+	 * @param cardId
+	 * @param stackTable
+	 * @return true if successful else false
+	 */
 	public static boolean removeCardFromStack(int cardId, String stackTable)
 	{
 		try {
@@ -210,6 +234,12 @@ public class FlashCardDatabase {
 	}
 	
 	
+	/**
+	 * gets the cards with in the flash card table 
+	 * returns them as a ArrayList of CardPairs, which stores the cards information 
+	 * @param getStack
+	 * @return ArrayList<CardPair> 
+	 */
 	public static ArrayList<CardPair> getFlashCardStack(String getStack)
 	{
 		ArrayList<CardPair> returnArrayList = new ArrayList<CardPair>();
@@ -219,6 +249,7 @@ public class FlashCardDatabase {
 			String stackQuery = "SELECT id, front, back FROM  " + getStack.toLowerCase();
 			ResultSet rs = stmt.executeQuery(stackQuery);
 
+			//if there is nothing in the table, then it will return an empty ArrayList
 			while(rs.next())
 			{
 				String cardFront = rs.getString("front");
@@ -242,6 +273,11 @@ public class FlashCardDatabase {
 		return returnArrayList;
 	}
 	
+	/**
+	 * gets the name from the flash_card_list table 
+	 * returns them as an ObservableList which is used to populate the table in FlashCardOverview
+	 * @return ObservableList<SimpleStringProperty> 
+	 */
 	public static ObservableList<SimpleStringProperty> getFlashCardList()
 	{
 		ObservableList<SimpleStringProperty> returnArrayList = FXCollections.observableArrayList();
@@ -268,6 +304,9 @@ public class FlashCardDatabase {
 	
 	/**
 	 * Drops the flash_card_list table 
+	 * used for debugging purposes currently, but can be used in the future to delete 
+	 * all the flash cards in the program
+	 * 
 	 */
 	public static boolean dropFlashCardList() {
 		try {
@@ -284,7 +323,13 @@ public class FlashCardDatabase {
 		
 	}
 	
-	
+	/**
+	 * Drops the specified name from the flash_card_list table
+	 * used when the delete flash card stack menu option is selected in the rootController 
+	 * 
+	 * @param removeStack
+	 * @return boolean 
+	 */
 	public static boolean removeFlashCardStackFromList(String removeStack) {
 		try {
 			String removeTableQuery = "DELETE FROM flash_card_list WHERE name = '" + removeStack + "'";
@@ -301,6 +346,13 @@ public class FlashCardDatabase {
 		}
 	}
 	
+	/**
+	 * removes the specified flash card stack table 
+	 * used when the delete flash card stack menu option is selected in the rootController 
+	 * 
+	 * @param dropStack
+	 * @return boolean 
+	 */
 	public static boolean dropFlashCardStack(String dropStack) {
 		try {
 			String dropTableQuery = "DROP TABLE IF EXISTS " + dropStack;

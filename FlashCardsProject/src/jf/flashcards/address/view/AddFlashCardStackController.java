@@ -1,5 +1,6 @@
 /**
  * Controller Class for the AddFlashCardStack view 
+ * adds functionality to the AddFlashCardStack 
  * 
  * @author johnfu
  * 
@@ -26,6 +27,7 @@ public class AddFlashCardStackController {
 	 
 	 @FXML
 	 private void initialize() {
+		 //sets the errorMsgLabel to blank initially 
 		 ErrorMsgLabel.setText("");
 	 }
 	 
@@ -47,7 +49,10 @@ public class AddFlashCardStackController {
 	 } 
 	
 
-	
+	/**
+	 * checks if the text input is valid, currently to see if it is not false 
+	 * @return boolean, true if valid else false
+	 */
 	private boolean checkValidInput()
 	{
 		if(newStackName.getText() == null || newStackName.getText().length() == 0)
@@ -59,6 +64,12 @@ public class AddFlashCardStackController {
 	}
 	
 	
+	/**
+	 * 
+	 * handles the ok button 
+	 * when pressed calls insertIntoFlashCardList() to add a new stack 
+	 *
+	 */
 	@FXML
 	private void handleOkButton() {
 		if(checkValidInput())
@@ -71,6 +82,10 @@ public class AddFlashCardStackController {
 		
 	}
 	
+	
+	/**
+	 * closes the dialogStage when cancel button is pressed
+	 */
 	@FXML
 	private void handleCancelButton(){
 		

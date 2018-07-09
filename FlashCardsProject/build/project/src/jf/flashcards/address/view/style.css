@@ -1,0 +1,19 @@
+.background {
+    -fx-background-color: #ffffff;
+}
+
+.label {
+    -fx-font-size: 13pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: black;
+    -fx-opacity: 1.0;
+}
+
+.front_back_Label {
+	-fx-font-size: 11pt;
+    -fx-font-family: "Arial";
+    -fx-text-fill: black;
+    -fx-opacity: 0.6;
+	
+}
+

@@ -1,3 +1,12 @@
+/**
+ * 
+ * AddCardToStackController class
+ * provides functionality to the AddCardToStackController view
+ * 
+ * @author johnfu
+ * 
+ * 
+ */
 package jf.flashcards.address.view;
 
 import javafx.fxml.FXML;
@@ -9,7 +18,7 @@ import jf.flashcards.address.model.FlashCardDatabase;
 
 public class AddCardToStackController {
 	
-	
+	 //FXML private variables 
 	 @FXML
 	 private TextField newCardFront;
 	 
@@ -19,10 +28,13 @@ public class AddCardToStackController {
 	 @FXML
 	 private Label msgLabel;
 	
+	 //sets the dialogStage 
 	 private Stage dialogStage;
 	 
+	 //currentTable string to indicate which table we are adding a new Card into
 	 private String currentTable = "";
 	
+	 
 	 private boolean cancelClicked = false;
 	 
 	 
@@ -42,17 +54,29 @@ public class AddCardToStackController {
 	   
 	}
 	 
+	 /**
+	  * sets the currentTable string
+	  * @param setCurrentTable
+	  */
 	public void setCurrentStackTable(String setCurrentTable)
 	{
 		currentTable = setCurrentTable;
 	}
 	
+	
+	/**
+	 * returns the cancelClicked boolean 
+	 * @return
+	 */
 	public boolean returnCancelClicked() {
 		return cancelClicked;
 	}
 	 
 	 
-		
+	
+	/**
+	 * closes the dialogStage 
+	 */
 	@FXML
 	private void handleCancelButton(){
 			
@@ -61,6 +85,11 @@ public class AddCardToStackController {
 			
 	}
 	
+	
+	/**
+	 * checks whether the inputs are valid and then adds the card to the database
+	 * allows the user to continue adding cards after a successful addition  
+	 */
 	@FXML 
 	private void handleAddButton()
 	{
@@ -78,6 +107,11 @@ public class AddCardToStackController {
 		}
 	}
 	
+	/**
+	 * private method to check if the input boxes have a valid input, 
+	 * currently checking if they are null or empty
+	 * @return true if valid, else false 
+	 */
 	private boolean checkValidInputs() {
 		if(newCardFront.getText() == null || newCardFront.getText().length() ==0)
 		{

@@ -1,3 +1,14 @@
+/**
+ * 
+ * RootStageController 
+ * used to give functionality to the RootStage menu bar
+ * 
+ * 
+ * @author johnfu
+ * 
+ * 
+ * 
+ */
 package jf.flashcards.address.view;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -10,6 +21,7 @@ import jf.flashcards.address.model.FlashCardDatabase;
 
 public class RootStageController {
 	
+	//reference to the mainApp 
 	private MainApp mainApp; 
 	
     /**
@@ -22,6 +34,14 @@ public class RootStageController {
     }
     
     
+    
+    /**
+     * 
+     * gives functionality to the menu option "add new flash card stack"
+     * handleNewStack() calls the mainApp function showAddNewFlashCardStack() which displays
+     * the view to add a new flash card stack 
+     * 
+     */
     @FXML
     private void handleNewStack(){
     	
@@ -34,22 +54,22 @@ public class RootStageController {
     		
     		//I call this here because this allows me to update my list of flash cards
     		//the FlashCardOverview isn't updating to the new stack list thats why i call this here again
-    		//it doesnt really seem like a good method but it works 
     		mainApp.showFlashCardOverview();
     		
-//    		ObservableList<SimpleStringProperty> flashCardStack = FlashCardDatabase.getFlashCardList();
-//            
-//            for(SimpleStringProperty i : flashCardStack)
-//            {
-//            	System.out.println(i);
-//            }
     		
     	}
     	
     }
     
+    /**
+     * 
+     * displays the about alert 
+     * 
+     * 
+     */
     @FXML
     private void handleAbout() {
+    	//displays the about information using Alert
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("FlashCard Application");
         alert.setHeaderText("About Application");
@@ -59,6 +79,13 @@ public class RootStageController {
     }
     
     
+    /**
+     * 
+     * gives functionality to the "Delete Flash Card Stack" menu option
+     * calls showDeleteFlashCardStack() method in the mainApp which displays the 
+     * showDeleteFlashCardStack view 
+     * 
+     */
     @FXML
     private void handleDeleteStack(){
     	
