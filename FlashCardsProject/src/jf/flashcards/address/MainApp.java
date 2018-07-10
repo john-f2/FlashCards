@@ -181,7 +181,7 @@ public class MainApp extends Application {
             //sets the Stage and Scene
             //Allows the new Scene to be shown in a window 
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Person");
+            dialogStage.setTitle("Add New Card");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             //create scene object and give it the page variable 
@@ -230,7 +230,7 @@ public class MainApp extends Application {
             //sets the Stage and Scene
             //Allows the new Scene to be shown in a window 
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Person");
+            dialogStage.setTitle("Add New Stack");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             //create scene object and give it the page variable 
@@ -272,7 +272,7 @@ public class MainApp extends Application {
             //sets the Stage and Scene
             //Allows the new Scene to be shown in a window 
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Person");
+            dialogStage.setTitle("Delete Stack");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(primaryStage);
             //create scene object and give it the page variable 
