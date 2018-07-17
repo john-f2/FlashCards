@@ -35,8 +35,8 @@ I plan to continue adding on to this small application. I want to continue impro
 ## Author
 john-f2
 
-## Licensing 
-This project is Unlicensed
+## License
+MIT License
 
 
 
